@@ -1,0 +1,7 @@
+.bg-cover {
+    background-size: cover !important;
+}
+
+body {
+    min-height: 1vh;
+}
