@@ -1,0 +1,10 @@
+const defaults = {
+    width: 160,
+    height: 160,
+    img: "../common/img/network_image/desktop.svg",
+    text: "Network Card",
+    ip: "138.68.41.78",
+    preview: {
+        scale: 0.8
+    }
+};
