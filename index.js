@@ -68,44 +68,6 @@ edges1.forEach((edges1) => {
 	});
 });
 
-function getTheMissingEdges1(x1, x2){
-	var output = []
-	var k=0
-	for(var i=0; i<x2.length; i=i+2){
-		for(var j=0; j<x1.length; j=j+2){
-			if(x2[i]===x1[j]||x2[i+1]===x1[j+1]||x2[i+1]===x1[j]||x2[i]===x1[j+1]){
-				k=100
-				break
-			}
-		}
-		if(k==100){
-			k=0
-			output.push(x2[i])
-			output.push(x2[i+1])
-		}
-	}
-	return output
-}
-
-function getTheMissingEdges2(x1, x2){
-	var output = []
-	var k=0
-	for(var i=0; i<x1.length-1; i=i+2){
-		for(var j=0; j<x2.length-1; j=j+2){
-			if(x1[i]===x2[j]||x1[i+1]===x2[j+1]||x1[i+1]===x2[j]||x1[i]===x2[j+1]){
-				k=100
-				break
-			}
-		}
-		if(k==100){
-			k=0
-			output.push(x1[i])
-			output.push(x1[i+1])
-		}
-	}
-	return output
-}
-
 function uniq(a) {
     var seen = {};
     return a.filter(function(item) {
@@ -162,7 +124,7 @@ else{
 		});
 	});
 
-	edges1.forEach((edge) => {
+	edges2.forEach((edge) => {
 		for(var i=0; i<sna1.length; i++){
 			if(nodes1.get(edge.from).label === sna1[i] || nodes1.get(edge.to).label === sna1[i]){
 				rea1.push(nodes1.get(edge.from).label)
@@ -179,12 +141,120 @@ else{
 			}
 		}
 	});
-	
+
 	var missingNodes1 = getTheMissingNodes1(rea1)
 	var missingNodes2 = getTheMissingNodes2(rea2)
-	var missingEdges1 = getTheMissingEdges1(rea1, rea2)
-	var missingEdges2 = getTheMissingEdges2(rea1, rea2)
+	var missingEdges1 = []
+	var missingEdges2 = []
+	
+	
+	var nodess1 = []
+	nodes1.forEach((node) => {
+		nodess1.push(node.label)
+	});
+	for(var i=0; i<missingNodes2.length; i++){
+		nodess1.push(missingNodes2[i])
+	}
+	
+	var nodess2 = []
+	nodes2.forEach((node) => {
+		nodess2.push(node.label)
+	});
+	for(var i=0; i<missingNodes1.length; i++){
+		nodess2.push(missingNodes1[i])
+	}
 
+	var r1=0
+	var r2=0
+	
+	var edgess1 = []
+	edges1.forEach((edge) =>{
+		for(var i=0; i<nodess1.length; i++){
+			for(var j=0; j<nodess1.length; j++){
+				nodes1.forEach((node) =>{
+					if(node.label === nodess1[i]){
+						r1 = node.id
+					}
+				});
+				nodes1.forEach((node) =>{
+					if(node.label === nodess1[j]){
+						r2 = node.id
+					}
+				});
+				if(edge.from===r1 && edge.to===r2){
+					edgess1.push(nodess1[i])
+					edgess1.push(nodess1[j])
+				}
+				r1=-10
+				r2=-10
+			}
+		}
+	});
+
+	var edgess2 = []
+	r1=0
+	r2=0
+	edges2.forEach((edge) =>{
+		for(var i=0; i<nodess2.length; i++){
+			for(var j=0; j<nodess2.length; j++){
+				nodes2.forEach((node) =>{
+					if(node.label === nodess2[i]){
+						r1 = node.id
+					}
+				});
+				nodes2.forEach((node) =>{
+					if(node.label === nodess2[j]){
+						r2 = node.id
+					}
+				});
+				if(edge.from===r1 && edge.to===r2){
+					edgess2.push(nodess2[i])
+					edgess2.push(nodess2[j])
+				}
+				r1=-10
+				r2=-10
+			}
+		}
+	});
+	console.log(edgess1)
+	console.log(edgess2)
+
+
+	for(var i=0; i<edgess1.length; i=i+2){
+		for(var j=0;j<edgess2.length; j=j+2){
+			if((edgess1[i]==edgess2[j] && edgess1[i+1]==edgess2[j+1])||(edgess1[i+1]==edgess2[j] && edgess1[i]==edgess2[j+1])){
+				edgess1.splice(i, 1)
+				edgess1.splice(i, 1)
+			}
+		}
+	}
+
+	for(var i=0; i<edgess1.length; i=i+2){
+		for(var j=0;j<edgess2.length; j=j+2){
+			if(!((edgess1[i]==edgess2[j] && edgess1[i+1]==edgess2[j+1])||(edgess1[i+1]==edgess2[j] && edgess1[i]==edgess2[j+1]))){
+				edgess2.splice(j, 1)
+				edgess2.splice(j, 1)
+			}
+		}
+	}
+	console.log(edgess1)
+	console.log(edgess2)
+	missingEdges2 = edgess1
+	missingEdges1 = edgess2
+	console.log(missingEdges1)
+	console.log(missingEdges2)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	var output1 = ""
 	var output2 = ""
@@ -344,9 +414,7 @@ else{
 	});
 	for(var i=0; i<me1.length; i+=2){
 		f = GiveTheID1(me1[i])
-		console.log(f)
 		t = GiveTheID1(me1[i+1])
-		console.log(t)
 		eo1.push({from: f, to: t, color: "red"})
 	}	
 	
@@ -358,9 +426,7 @@ else{
 	});
 	for(var i=0; i<me2.length; i+=2){
 		f = GiveTheID2(me2[i])
-		console.log(f)
 		t = GiveTheID2(me2[i+1])
-		console.log(t)
 		eo2.push({from: f, to: t, color: "red"})
 	}	
 	
@@ -415,16 +481,6 @@ else{
     edges: edges4
 	};
 	var options = {};
-	}
 	var network = new vis.Network(container, data4, options);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	window.alert(output15);
+// 	window.alert(output15);
+}
