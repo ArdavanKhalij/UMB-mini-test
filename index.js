@@ -1,8 +1,8 @@
 // create an array with nodes
 var nodes1 = new vis.DataSet([
-    {id: 1, label: 'A'},
-    {id: 2, label: 'B'},
-    {id: 3, label: 'C'}
+    {id: 1, label: 'A', x: 100, y: 200},
+    {id: 2, label: 'B', x: 200, y: 200},
+    {id: 3, label: 'C', x: 200, y: 100}
 ]);
 
     // create an array with edges
@@ -22,13 +22,11 @@ var data1 = {
 
 var options = {};
 
-    // initialize your network!
-var network = new vis.Network(container, data1, options);
     // create an array with nodes
 var nodes2 = new vis.DataSet([
-    {id: 1, label: 'B'},
-    {id: 2, label: 'C'},
-    {id: 3, label: 'D'}
+    {id: 1, label: 'B', x: 200, y: 200},
+    {id: 2, label: 'C', x: 200, y: 100},
+    {id: 3, label: 'D', x: 300, y: 300}
 ]);
 
     // create an array with edges
@@ -46,9 +44,6 @@ var data2 = {
     edges: edges2
 };
 var options = {};
-
-    // initialize your network!
-var network = new vis.Network(container, data2, options);
 
 var sim1=0
 var sim2=0
@@ -199,7 +194,13 @@ else{
 	var a1 = "You can add "
 	var a2 = " to "
 	var a3 = " edge.\n"
+	
+	me1 = []
+	me2 = []
+	
 	for(var i=0; i<missingEdges1.length; i=i+2){
+		me1.push(missingEdges1[i])
+		me1.push(missingEdges1[i+1])
 		q1 = output1.concat(a1)
 		q2 = q1.concat(missingEdges1[i])
 		q3 = q2.concat(a2)
@@ -207,24 +208,34 @@ else{
 		output1 = q4.concat(a3)
 	}
 	for(var i=0; i<missingEdges2.length; i=i+2){
+		me2.push(missingEdges2[i])
+		me2.push(missingEdges2[i+1])
 		q1 = output2.concat(a1)
 		q2 = q1.concat(missingEdges2[i])
 		q3 = q2.concat(a2)
 		q4 = q3.concat(missingEdges2[i+1])
 		output2 = q4.concat(a3)
 	}
+	
 	output10 = ""
 	output11 = ""
+	
+	mn1 = []
+	mn2 = []
+	
 	for(var i=0; i<missingNodes1.length; i++){
+		mn2.push(missingNodes1[i])
 		q1 = output10.concat(a1)
 		q2 = q1.concat(missingNodes1[i])
 		output10 = q2.concat(" to your nodes.\n")
 	}
 	for(var i=0; i<missingNodes2.length; i++){
+		mn1.push(missingNodes2[i])
 		q1 = output11.concat(a1)
 		q2 = q1.concat(missingNodes2[i])
 		output11 = q2.concat(" to your nodes.\n")
 	}
+	
 	
 	output3 = "For the first network graph:\n"
 	output4 = "For the second network graph:\n"
@@ -237,7 +248,114 @@ else{
 	output13= output12.concat(output9)
 	output14= output13.concat(output10)
 	output15= output14.concat(output7)
-
-	window.alert(output15);
 	
-}
+	
+	
+	
+	
+	console.log(mn1)
+	console.log(mn2)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	no1 = []
+	numberofnodes = 0
+	nodes1.forEach((node) => {
+		no1.push({id: node.id, label: node.label, x: node.x, y: node.y})
+		numberofnodes++
+	});
+	for(var i=0; i<mn1.length; i++){
+		x1=0
+		y1=0
+		nodes2.forEach((Node) =>{
+			if(Node.label == mn1[i]){
+				x1=Node.x
+				y1=Node.y
+			}
+		});
+		no1.push({id: numberofnodes+1, label: mn1[i], x: x1, y: y1, color: {background: "orange"}})
+	}
+	
+	
+	
+	no2 = []
+	numberofnodes = 0
+	nodes2.forEach((node) => {
+		no2.push({id: node.id, label: node.label, x: node.x, y: node.y})
+		numberofnodes++
+	});
+	for(var i=0; i<mn2.length; i++){
+		x2=0
+		y2=0
+		nodes1.forEach((Node) =>{
+			if(Node.label == mn2[i]){
+				x2=Node.x
+				y2=Node.y
+			}
+		});
+		no2.push({id: numberofnodes+1, label: mn2[i], x: x2, y: y2, color: {background: "orange"}})
+	}
+	
+	console.log(no1)
+	console.log(no2)
+	
+	// create an array with nodes
+	var nodes3 = new vis.DataSet(no1);
+
+    // create an array with edges
+	var edges3 = new vis.DataSet([
+    {from: 1, to: 3},
+    {from: 3, to: 2}
+	]);
+
+    // create a network
+	var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+	var data3 = {
+    nodes: nodes3,
+    edges: edges3
+	};
+
+	var options = {};
+	var network = new vis.Network(container, data3, options);
+
+
+    // create an array with nodes
+	var nodes4 = new vis.DataSet(no2);
+
+    // create an array with edges
+	var edges4 = new vis.DataSet([
+    {from: 1, to: 2},
+    {from: 1, to: 3}
+	]);
+
+    // create a network
+	var container = document.getElementById('mynetwork2');
+
+    // provide the data in the vis format
+	var data4 = {
+    nodes: nodes4,
+    edges: edges4
+	};
+	var options = {};
+	}
+	var network = new vis.Network(container, data4, options);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	window.alert(output15);
