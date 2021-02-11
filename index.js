@@ -482,5 +482,5 @@ else{
 	};
 	var options = {};
 	var network = new vis.Network(container, data4, options);
-// 	window.alert(output15);
+ 	window.alert(output15);
 }
