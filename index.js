@@ -84,7 +84,6 @@ function getTheMissingEdges1(x1, x2){
 			output.push(x2[i+1])
 		}
 	}
-	console.log(output)
 	return output
 }
 
@@ -104,7 +103,6 @@ function getTheMissingEdges2(x1, x2){
 			output.push(x1[i+1])
 		}
 	}
-	console.log(output)
 	return output
 }
 
@@ -253,8 +251,7 @@ else{
 	
 	
 	
-	console.log(mn1)
-	console.log(mn2)
+
 	
 	
 	
@@ -303,17 +300,92 @@ else{
 		no2.push({id: numberofnodes+1, label: mn2[i], x: x2, y: y2, color: {background: "orange"}})
 	}
 	
-	console.log(no1)
-	console.log(no2)
+	function GiveTheID1(label){
+		for(var i=0; i<no1.length; i++){
+			if(no1[i].label === label){
+				return no1[i].id
+			}
+		}
+	}
+
+	function GiveTheID2(label){
+		for(var i=0; i<no2.length; i++){
+			if(no2[i].label === label){
+				return no2[i].id
+			}
+		}
+	}
+	
+	
+	function deleteRepetedEdges(edges){
+		for(var i=0; i<edges.length; i+=2){
+			for(var j=0; j<edges.length; j+=2){
+				if(i!=j && ((edges[i]==edges[j] && edges[i+1]==edges[j+1]) || (edges[i+1]==edges[j] && edges[i]==edges[j+1]))){
+					edges.splice(i, 1);
+					edges.splice(2, 1);
+				}
+			}
+		}
+		return edges
+	}
+	
+	me3 = deleteRepetedEdges(me1)
+	me4 = deleteRepetedEdges(me2)
+	me1 = me3
+	me2 = me4
+	
+	
+		
+	eo1 = []
+	numberofnodes = 0
+	edges1.forEach((edge) =>{
+		eo1.push({from: edge.from, to: edge.to})
+		numberofnodes++
+	});
+	for(var i=0; i<me1.length; i+=2){
+		f = GiveTheID1(me1[i])
+		console.log(f)
+		t = GiveTheID1(me1[i+1])
+		console.log(t)
+		eo1.push({from: f, to: t, color: "red"})
+	}	
+	
+	eo2 = []
+	numberofnodes = 0
+	edges2.forEach((edge) =>{
+		eo2.push({from: edge.from, to: edge.to})
+		numberofnodes++
+	});
+	for(var i=0; i<me2.length; i+=2){
+		f = GiveTheID2(me2[i])
+		console.log(f)
+		t = GiveTheID2(me2[i+1])
+		console.log(t)
+		eo2.push({from: f, to: t, color: "red"})
+	}	
+	
+	
+	function deleteRepetedEdgesKind2(edges){
+		for(var i=0; i<edges.length; i++){
+			for(var j=0; j<edges.length; j++){
+				if(edges[i].from==edges[j].to && edges[j].from==edges[i].to){
+					edges.splice(j, 1);
+				}
+			}
+		}
+		return edges
+	}
+	
+	eo3 = deleteRepetedEdgesKind2(eo1)
+	eo4 = deleteRepetedEdgesKind2(eo2)
+	eo1 = eo3
+	eo2 = eo4
 	
 	// create an array with nodes
 	var nodes3 = new vis.DataSet(no1);
 
     // create an array with edges
-	var edges3 = new vis.DataSet([
-    {from: 1, to: 3},
-    {from: 3, to: 2}
-	]);
+	var edges3 = new vis.DataSet(eo1);
 
     // create a network
 	var container = document.getElementById('mynetwork');
@@ -332,10 +404,7 @@ else{
 	var nodes4 = new vis.DataSet(no2);
 
     // create an array with edges
-	var edges4 = new vis.DataSet([
-    {from: 1, to: 2},
-    {from: 1, to: 3}
-	]);
+	var edges4 = new vis.DataSet(eo2);
 
     // create a network
 	var container = document.getElementById('mynetwork2');
