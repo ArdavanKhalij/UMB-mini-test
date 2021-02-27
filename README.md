@@ -1,3 +1,2 @@
 # UMB-mini-test
-This program is for testing two seperat graphs. I used vis.js framwork.
-UMass Boston
+This program is for testing two separate graphs. I used the vis framework. UMass Boston
